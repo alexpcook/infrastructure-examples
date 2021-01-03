@@ -2,10 +2,22 @@ provider "aws" {
   region = var.aws_region
 }
 
-variable "aws_region" {}
-variable "ami" {}
-variable "my_public_ip" {}
-variable "ssh_public_key" {}
+variable "aws_region" {
+  description = "aws region for deployment"
+}
+
+variable "ami" {
+  description = "ami for ec2 instance"
+}
+
+variable "my_public_ip" {
+  description = "public ip address to allow ssh traffic to ec2 instance"
+  sensitive = true
+}
+
+variable "ssh_public_key" {
+  description = "public key for ssh traffic to ec2 instance"
+}
 
 resource "aws_vpc" "web_tier" {
   cidr_block = "192.168.0.0/16"
