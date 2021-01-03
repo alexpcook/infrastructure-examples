@@ -1,6 +1,10 @@
 provider "aws" {
-  region = "us-west-1"
+  region = var.aws_region
 }
+
+variable "aws_region" {}
+variable "ami" {}
+variable "my_public_ip" {}
 
 resource "aws_vpc" "web_tier" {
   cidr_block = "192.168.0.0/16"
@@ -20,7 +24,7 @@ resource "aws_subnet" "internet" {
 }
 
 resource "aws_instance" "web_server" {
-  ami             = "ami-09d9c5cdcfb8fc655" // RHEL
+  ami             = var.ami
   instance_type   = "t2.micro"
   subnet_id       = aws_subnet.internet.id
   security_groups = [aws_security_group.ingress_ssh_allow.id]
@@ -36,7 +40,7 @@ resource "aws_security_group" "ingress_ssh_allow" {
   vpc_id      = aws_vpc.web_tier.id
 
   ingress {
-    cidr_blocks = ["173.229.10.117/32"]
+    cidr_blocks = [var.my_public_ip]
     from_port   = 22
     protocol    = "tcp"
     to_port     = 22
