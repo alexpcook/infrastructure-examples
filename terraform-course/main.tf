@@ -10,3 +10,20 @@ resource "aws_instance" "web_server" {
     "os" = "rhel"
   }
 }
+
+resource "aws_vpc" "web_tier" {
+  cidr_block = "172.16.0.0/24"
+
+  tags = {
+    "tier" = "web"
+  }
+}
+
+resource "aws_subnet" "internet" {
+  vpc_id     = aws_vpc.web_tier.id
+  cidr_block = "172.16.0.0/28"
+
+  tags = {
+    "tier" = "web"
+  }
+}
