@@ -1,0 +1,14 @@
+- hosts: all
+  become: "yes"
+  vars:
+    packages:
+      - vim
+      - httpd
+  tasks:
+    - name: Install several useful packages
+      dnf:
+        name: "{{ packages }}"
+        state: latest
+    - name: Finished
+      debug:
+        msg: Packages successfully installed
