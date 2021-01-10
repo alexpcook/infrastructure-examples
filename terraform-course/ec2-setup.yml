@@ -1,5 +1,5 @@
 - hosts: all
-  become: "yes"
+  become: yes
   vars:
     packages:
       - vim
@@ -9,6 +9,10 @@
       dnf:
         name: "{{ packages }}"
         state: latest
+    - name: Start Apache service
+      service:
+        name: httpd
+        state: started
     - name: Finished
       debug:
-        msg: Packages successfully installed
+        msg: Apache successfully installed and running
