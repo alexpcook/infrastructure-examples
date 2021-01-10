@@ -12,7 +12,7 @@ variable "ami" {
 
 variable "my_public_ip" {
   description = "public ip address to allow ssh traffic to ec2 instance"
-  sensitive = true
+  sensitive   = true
 }
 
 variable "ssh_public_key" {
@@ -35,21 +35,10 @@ resource "aws_internet_gateway" "web_tier_gw" {
   }
 }
 
-resource "aws_route_table" "web_tier_rt" {
-  vpc_id = aws_vpc.web_tier.id
-  route {
-    cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.web_tier_gw.id
-  }
-
-  tags = {
-    "tier" = "web"
-  }
-}
-
-resource "aws_route_table_association" "web_tier_rt_association" {
-  subnet_id      = aws_subnet.internet.id
-  route_table_id = aws_route_table.web_tier_rt.id
+resource "aws_route" "web_tier_route" {
+  route_table_id         = aws_vpc.web_tier.default_route_table_id
+  destination_cidr_block = "0.0.0.0/0"
+  gateway_id             = aws_internet_gateway.web_tier_gw.id
 }
 
 resource "aws_subnet" "internet" {
@@ -62,11 +51,14 @@ resource "aws_subnet" "internet" {
 }
 
 resource "aws_instance" "web_server" {
-  ami             = var.ami
-  instance_type   = "t2.micro"
-  subnet_id       = aws_subnet.internet.id
-  security_groups = [aws_security_group.ingress_ssh_allow.id]
-  key_name        = aws_key_pair.ssh_key.key_name
+  ami           = var.ami
+  instance_type = "t2.micro"
+  subnet_id     = aws_subnet.internet.id
+  security_groups = [
+    aws_security_group.ingress_ssh_allow.id,
+    aws_security_group.ingress_http_allow.id
+  ]
+  key_name = aws_key_pair.ssh_key.key_name
 
   tags = {
     "os" = "rhel"
@@ -95,6 +87,31 @@ resource "aws_security_group" "ingress_ssh_allow" {
   tags = {
     "protocol" = "ssh"
     "ports"    = "22"
+  }
+}
+
+resource "aws_security_group" "ingress_http_allow" {
+  name        = "allow_http"
+  description = "allow http from my public ip"
+  vpc_id      = aws_vpc.web_tier.id
+
+  ingress {
+    cidr_blocks = [var.my_public_ip]
+    from_port   = 80
+    protocol    = "tcp"
+    to_port     = 80
+  }
+
+  egress {
+    cidr_blocks = ["0.0.0.0/0"]
+    from_port   = 0
+    protocol    = "-1"
+    to_port     = 0
+  }
+
+  tags = {
+    "protocol" = "http"
+    "ports"    = "80"
   }
 }
 
