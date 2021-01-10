@@ -4,4 +4,4 @@
 *.tfvars
 *.terraform.*
 keys/
-ansible/hosts
+hosts
