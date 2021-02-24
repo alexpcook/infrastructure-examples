@@ -4,7 +4,11 @@ pipeline {
         stage('build') {
             steps {
                 sh 'go version'
-                sh 'cd jenkins-go && go build'
+            }
+        }
+        stage('test') {
+            steps {
+                sh 'go test -v'
             }
         }
     }
