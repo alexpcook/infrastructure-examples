@@ -8,7 +8,7 @@ pipeline {
         }
         stage('test') {
             steps {
-                sh 'go test -v'
+                sh 'cd jenkins-go && go test -v'
             }
         }
     }
