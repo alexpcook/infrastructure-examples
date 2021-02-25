@@ -23,8 +23,17 @@ func findAndRemoveGreeting(s string, greetings []string) ([]string, error) {
 	return nil, fmt.Errorf("greeting %v not in %v", s, greetings)
 }
 
+// Simulate a broken test.
+func alwaysTrue() bool {
+	return true
+}
+
 // TestGreetingFeed tests the GreetingFeed function.
 func TestGreetingFeed(t *testing.T) {
+	if alwaysTrue() {
+		t.Error("this test always fails")
+	}
+
 	testCases := []struct {
 		name string
 		in   []string
