@@ -1,0 +1,2 @@
+# ignore goland-created directory
+.idea/*
