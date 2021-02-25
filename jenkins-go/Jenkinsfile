@@ -1,15 +1,15 @@
 pipeline {
-    agent any
-    stages {
-        stage('build') {
-            steps {
-                sh 'go version'
-            }
-        }
-        stage('test') {
-            steps {
-                sh 'cd jenkins-go && go test -v'
-            }
-        }
-    }
+	agent any
+	stages {
+		stage('build') {
+			steps {
+				sh 'go version'
+			}
+		}
+		stage('test') {
+			steps {
+				sh 'cd jenkins-go && go test -v'
+			}
+		}
+	}
 }
