@@ -1,6 +1,4 @@
 ### TODO ###
-# 2. Add IAMUserChangePassword policy to aws_iam_user.
-# 3. Create a role granting full S3 access to EC2 instances.
 # 4. Create CloudWatch billing alarm with SNS alert.
 
 provider "aws" {
@@ -13,6 +11,10 @@ data "aws_iam_policy" "AdministratorAccess" {
 
 data "aws_iam_policy" "IAMUserChangePassword" {
   arn = "arn:aws:iam::aws:policy/IAMUserChangePassword"
+}
+
+data "aws_iam_policy" "AmazonS3FullAccess" {
+  arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
 }
 
 resource "aws_iam_user" "user" {
@@ -40,4 +42,27 @@ resource "aws_iam_group_policy_attachment" "group_policy" {
 resource "aws_iam_user_policy_attachment" "user_policy" {
   user       = aws_iam_user.user.name
   policy_arn = data.aws_iam_policy.IAMUserChangePassword.arn
+}
+
+resource "aws_iam_role" "role" {
+  name        = "ec2_full_access_to_s3"
+  description = "Grant EC2 instances full access to S3."
+  path        = "/acg/"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "ec2.amazonaws.com"
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+EOF
+
+  managed_policy_arns = [data.aws_iam_policy.AmazonS3FullAccess.arn]
 }
