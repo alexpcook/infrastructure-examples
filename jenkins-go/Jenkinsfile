@@ -2,7 +2,7 @@ pipeline {
 	agent {
 		docker {
 		    image "golang:latest"
-		    args "-u root --privileged"
+		    args "-u root"
 		}
 	}
 	stages {
