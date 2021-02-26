@@ -5,6 +5,7 @@ pipeline {
 	stages {
 		stage("build") {
 			steps {
+			    sh "XDG_CACHE_HOME=/tmp/.cache"
 				dir("jenkins-go") {
 					sh "go version"
 					sh "go fmt ./..."
