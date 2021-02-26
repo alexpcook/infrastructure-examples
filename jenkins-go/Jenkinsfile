@@ -5,9 +5,9 @@ pipeline {
 	stages {
 		stage("build") {
 			steps {
-			    sh "XDG_CACHE_HOME=/tmp/.cache"
 				dir("jenkins-go") {
 					sh "go version"
+					sh "go env GOCACHE"
 					sh "go fmt ./..."
 					// set an upper limit on the timeout for a step
 					timeout(time: 2, unit: "MINUTES") {
