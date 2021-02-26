@@ -10,13 +10,13 @@ pipeline {
 			steps {
 				dir("jenkins-go") {
 					sh "go version"
-					sh "go env GOCACHE"
-					// sh "go env -w GOCACHE=/tmp/.cache/go-build"
 					sh "go fmt ./..."
+
 					// set an upper limit on the timeout for a step
-					timeout(time: 2, unit: "MINUTES") {
-					    sh "sleep 100"
+					timeout(time: 60, unit: "SECONDS") {
+					    sh "sleep 45"
 					}
+
 					// set a limit on the number of retries for a step
 					retry(5) {
 					    sh "go run build.go"
