@@ -11,6 +11,10 @@ data "aws_iam_policy" "AdministratorAccess" {
   arn = "arn:aws:iam::aws:policy/AdministratorAccess"
 }
 
+data "aws_iam_policy" "IAMUserChangePassword" {
+  arn = "arn:aws:iam::aws:policy/IAMUserChangePassword"
+}
+
 resource "aws_iam_user" "user" {
   name = var.users[0]
   path = "/acg/"
@@ -31,4 +35,9 @@ resource "aws_iam_user_group_membership" "membership" {
 resource "aws_iam_group_policy_attachment" "group_policy" {
   group      = aws_iam_group.group.name
   policy_arn = data.aws_iam_policy.AdministratorAccess.arn
+}
+
+resource "aws_iam_user_policy_attachment" "user_policy" {
+  user       = aws_iam_user.user.name
+  policy_arn = data.aws_iam_policy.IAMUserChangePassword.arn
 }
