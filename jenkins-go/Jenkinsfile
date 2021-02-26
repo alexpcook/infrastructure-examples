@@ -6,6 +6,10 @@ pipeline {
 				dir("jenkins-go") {
 					sh "go version"
 					sh "go fmt ./..."
+					// set an upper limit on the timeout for a step
+					timeout(time: 2, unit: "MINUTES") {
+					    sh "sleep 100"
+					}
 				}
 			}
 		}
