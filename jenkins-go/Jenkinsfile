@@ -6,7 +6,6 @@ pipeline {
 				dir("jenkins-go") {
 					sh "go version"
 					sh "go fmt ./..."
-					sh "go install"
 				}
 			}
 		}
