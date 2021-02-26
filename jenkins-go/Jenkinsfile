@@ -7,7 +7,7 @@ pipeline {
 					sh "go version"
 					sh "go fmt ./..."
 					sh "go install"
-					sh "$(go env GOPATH)/bin/jenkins-go"
+					sh "\$5(go env GOPATH)/bin/jenkins-go"
 				}
 			}
 		}
