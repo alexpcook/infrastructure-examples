@@ -46,24 +46,11 @@ resource "aws_iam_group_policy_attachment" "group_policy" {
 
 ### IAM role ###
 resource "aws_iam_role" "role" {
-  name        = "ec2_full_access_to_s3"
-  description = "Grant EC2 instances full access to S3."
-  path        = var.path
-
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": {
-        "Service": "ec2.amazonaws.com"
-      },
-      "Action": "sts:AssumeRole"
-    }
+  name               = "ec2_full_access_to_s3"
+  description        = "Grant EC2 instances full access to S3."
+  path               = var.path
+  assume_role_policy = file(var.ec2_sts_assume_role_policy_json)
+  managed_policy_arns = [
+    data.aws_iam_policy.AmazonS3FullAccess.arn,
   ]
-}
-EOF
-
-  managed_policy_arns = [data.aws_iam_policy.AmazonS3FullAccess.arn]
 }

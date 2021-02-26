@@ -17,3 +17,8 @@ variable "path" {
   type    = string
   default = "/acg/"
 }
+
+variable "ec2_sts_assume_role_policy_json" {
+  type    = string
+  default = "ec2_sts_assume_role_policy.json"
+}
