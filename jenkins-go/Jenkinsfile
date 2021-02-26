@@ -10,6 +10,10 @@ pipeline {
 					timeout(time: 2, unit: "MINUTES") {
 					    sh "sleep 100"
 					}
+					// set a limit on the number of retries for a step
+					retry(5) {
+					    sh "go run build.go"
+					}
 				}
 			}
 		}
