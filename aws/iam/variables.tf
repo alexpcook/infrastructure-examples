@@ -12,3 +12,8 @@ variable "groups" {
   type    = list(string)
   default = ["administrators"]
 }
+
+variable "path" {
+  type    = string
+  default = "/acg/"
+}

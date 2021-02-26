@@ -19,12 +19,12 @@ data "aws_iam_policy" "AmazonS3FullAccess" {
 
 resource "aws_iam_user" "user" {
   name = var.users[0]
-  path = "/acg/"
+  path = var.path
 }
 
 resource "aws_iam_group" "group" {
   name = var.groups[0]
-  path = "/acg/"
+  path = var.path
 }
 
 resource "aws_iam_user_group_membership" "membership" {
@@ -47,7 +47,7 @@ resource "aws_iam_user_policy_attachment" "user_policy" {
 resource "aws_iam_role" "role" {
   name        = "ec2_full_access_to_s3"
   description = "Grant EC2 instances full access to S3."
-  path        = "/acg/"
+  path        = var.path
 
   assume_role_policy = <<EOF
 {
