@@ -5,15 +5,16 @@ pipeline {
 			steps {
 				dir("jenkins-go") {
 					sh "go version"
-					sh "go fmt"
+					sh "go fmt ./..."
 					sh "go install"
+					sh "$(go env GOPATH)/bin/jenkins-go"
 				}
 			}
 		}
 		stage("test") {
 			steps {
 				dir("jenkins-go") {
-					sh "go test -v"
+					sh "go test -v ./..."
 				}
 			}
 		}
