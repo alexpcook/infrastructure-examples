@@ -1,6 +1,3 @@
-### TODO ###
-# Make sure IAM user can login to AWS console
-
 provider "aws" {
   region = var.region
 }
