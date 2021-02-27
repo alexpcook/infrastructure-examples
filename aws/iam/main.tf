@@ -1,3 +1,6 @@
+### TODO ###
+# Make sure IAM user can login to AWS console
+
 provider "aws" {
   region = var.region
 }
@@ -24,6 +27,11 @@ resource "aws_iam_user" "user" {
 resource "aws_iam_user_policy_attachment" "user_policy" {
   user       = aws_iam_user.user.name
   policy_arn = data.aws_iam_policy.IAMUserChangePassword.arn
+}
+
+resource "aws_iam_user_login_profile" "user_profile" {
+  user    = aws_iam_user.user.name
+  pgp_key = var.pgp_key
 }
 
 ### IAM group/membership/policy ####
@@ -53,4 +61,9 @@ resource "aws_iam_role" "role" {
   managed_policy_arns = [
     data.aws_iam_policy.AmazonS3FullAccess.arn,
   ]
+}
+
+### Output ###
+output "password" {
+  value = aws_iam_user_login_profile.user_profile.encrypted_password
 }
