@@ -1,20 +1,24 @@
 variable "region" {
-  type    = string
-  default = "us-west-1"
+  description = "The AWS region name"
+  type        = string
+  default     = "us-west-1"
 }
 
 variable "bucket_prefix" {
-  type    = string
-  default = "acg"
+  description = "The prefix for the S3 bucket names"
+  type        = string
+  default     = "acg"
 }
 
 variable "source_directory" {
-  type    = string
-  default = "src"
+  description = "The application source code sub-directory"
+  type        = string
+  default     = "src"
 }
 
 variable "mime_types" {
-  type = map(string)
+  description = "The content-type headers for each file type in source"
+  type        = map(string)
   default = {
     ".html" : "text/html",
     ".txt" : "text/plain",
