@@ -21,6 +21,13 @@ resource "aws_cloudwatch_metric_alarm" "total_cost" {
   alarm_actions = [aws_sns_topic.sns.arn]
 }
 
-// Existing NotifyMe topic imported into Terraform
 resource "aws_sns_topic" "sns" {
+  name_prefix  = var.name_prefix
+  display_name = "${var.name_prefix}-total-costs"
+}
+
+resource "aws_sns_topic_subscription" "sub" {
+  topic_arn = aws_sns_topic.sns.arn
+  protocol  = "email"
+  endpoint  = var.email_address
 }

@@ -7,3 +7,7 @@ variable "name_prefix" {
   type    = string
   default = "acg"
 }
+
+variable "email_address" {
+  type = string
+}
