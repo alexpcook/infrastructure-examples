@@ -5,10 +5,10 @@ variable "region" {
 
 variable "bucket_prefix" {
   type    = string
-  default = "acg-"
+  default = "acg"
 }
 
 variable "source_directory" {
   type    = string
-  default = "src/"
+  default = "src"
 }
