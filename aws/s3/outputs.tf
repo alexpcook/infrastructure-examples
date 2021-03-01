@@ -1,7 +1,5 @@
-output "s3-public-url" {
-  value = format("https://%s/", aws_s3_bucket.public.bucket_domain_name)
-}
-
-output "s3-private-url" {
-  value = format("https://%s/", aws_s3_bucket.private.bucket_domain_name)
+output "s3-url" {
+  value = {
+    for bucket in aws_s3_bucket.bucket : bucket.id => "https://${bucket.bucket_domain_name}/"
+  }
 }

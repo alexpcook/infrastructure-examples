@@ -24,3 +24,25 @@ variable "mime_types" {
     ".txt" : "text/plain",
   }
 }
+
+variable "s3_buckets" {
+  description = "Specifications for creating S3 buckets"
+  type = map(object({
+    name_prefix         = string
+    block_public_access = bool
+    object_acl          = string
+
+  }))
+  default = {
+    "b1" = {
+      name_prefix         = "public"
+      block_public_access = false
+      object_acl          = "public-read"
+    }
+    "b2" = {
+      name_prefix         = "private"
+      block_public_access = true
+      object_acl          = "private"
+    }
+  }
+}
