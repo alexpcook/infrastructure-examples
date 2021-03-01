@@ -4,6 +4,11 @@ provider "aws" {
 
 resource "aws_s3_bucket" "public" {
   bucket_prefix = join("-", [var.bucket_prefix, "public"])
+
+  versioning {
+    enabled = true
+  }
+
   server_side_encryption_configuration {
     rule {
       apply_server_side_encryption_by_default {
@@ -15,6 +20,11 @@ resource "aws_s3_bucket" "public" {
 
 resource "aws_s3_bucket" "private" {
   bucket_prefix = join("-", [var.bucket_prefix, "private"])
+
+  versioning {
+    enabled = true
+  }
+
   server_side_encryption_configuration {
     rule {
       apply_server_side_encryption_by_default {
