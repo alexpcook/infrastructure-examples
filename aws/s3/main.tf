@@ -18,6 +18,30 @@ resource "aws_s3_bucket" "bucket" {
       }
     }
   }
+
+  lifecycle_rule {
+    id      = "basic object management"
+    enabled = true
+
+    transition {
+      days          = 30
+      storage_class = "STANDARD_IA"
+    }
+
+    transition {
+      days          = 60
+      storage_class = "GLACIER"
+    }
+
+    noncurrent_version_transition {
+      days          = 30
+      storage_class = "STANDARD_IA"
+    }
+
+    noncurrent_version_expiration {
+      days = 60
+    }
+  }
 }
 
 resource "aws_s3_bucket_object" "object" {
