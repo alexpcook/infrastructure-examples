@@ -2,22 +2,18 @@ provider "aws" {
   region = var.region
 }
 
-resource "aws_s3_bucket" "b1" {
+resource "aws_s3_bucket" "public" {
   bucket_prefix = var.bucket_prefix
 }
 
-resource "aws_s3_bucket" "b2" {
+resource "aws_s3_bucket" "private" {
   bucket_prefix = var.bucket_prefix
 }
 
-resource "aws_s3_bucket_object" "o1" {
-  bucket = aws_s3_bucket.b1.id
-  key    = "version"
-  source = "src/version.txt"
-}
-
-resource "aws_s3_bucket_object" "o2" {
-  bucket = aws_s3_bucket.b2.id
-  key    = "animals"
-  source = "src/animals.html"
+resource "aws_s3_bucket_object" "object" {
+  for_each = fileset(var.source_directory, "*")
+  bucket   = aws_s3_bucket.public.id
+  key      = each.value
+  source   = join("", [var.source_directory, each.value])
+  etag     = filemd5(join("", [var.source_directory, each.value]))
 }
