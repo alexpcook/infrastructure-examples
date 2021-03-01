@@ -12,3 +12,11 @@ variable "source_directory" {
   type    = string
   default = "src"
 }
+
+variable "mime_types" {
+  type = map(string)
+  default = {
+    ".html" : "text/html",
+    ".txt" : "text/plain",
+  }
+}

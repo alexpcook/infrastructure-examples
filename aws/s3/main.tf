@@ -11,20 +11,22 @@ resource "aws_s3_bucket" "private" {
 }
 
 resource "aws_s3_bucket_object" "public" {
-  for_each = fileset(format("%s/", var.source_directory), "*")
-  bucket   = aws_s3_bucket.public.id
-  key      = each.value
-  source   = join("/", [var.source_directory, each.value])
-  etag     = filemd5(join("/", [var.source_directory, each.value]))
-  acl      = "public-read"
+  for_each     = fileset(format("%s/", var.source_directory), "*")
+  bucket       = aws_s3_bucket.public.id
+  key          = each.value
+  source       = join("/", [var.source_directory, each.value])
+  etag         = filemd5(join("/", [var.source_directory, each.value]))
+  content_type = lookup(var.mime_types, regex("\\.[a-z0-9]+$", each.value), null)
+  acl          = "public-read"
 }
 
 resource "aws_s3_bucket_object" "private" {
-  for_each = fileset(format("%s/", var.source_directory), "*")
-  bucket   = aws_s3_bucket.private.id
-  key      = each.value
-  source   = join("/", [var.source_directory, each.value])
-  etag     = filemd5(join("/", [var.source_directory, each.value]))
+  for_each     = fileset(format("%s/", var.source_directory), "*")
+  bucket       = aws_s3_bucket.private.id
+  key          = each.value
+  source       = join("/", [var.source_directory, each.value])
+  etag         = filemd5(join("/", [var.source_directory, each.value]))
+  content_type = lookup(var.mime_types, regex("\\.[a-z0-9]+$", each.value), null)
 }
 
 resource "aws_s3_bucket_public_access_block" "public" {
