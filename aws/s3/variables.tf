@@ -4,6 +4,11 @@ variable "region" {
   default     = "us-west-1"
 }
 
+variable "profile" {
+  description = "The AWS account to deploy the infrastructure to"
+  type        = string
+}
+
 variable "bucket_prefix" {
   description = "The prefix for the S3 bucket names"
   type        = string

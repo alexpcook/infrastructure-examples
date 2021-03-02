@@ -3,6 +3,10 @@ variable "region" {
   default = "us-west-1"
 }
 
+variable "profile" {
+  type = string
+}
+
 variable "users" {
   type    = list(string)
   default = ["alex.cook"]

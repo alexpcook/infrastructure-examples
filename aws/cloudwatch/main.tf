@@ -1,5 +1,6 @@
 provider "aws" {
-  region = var.region
+  profile = var.profile
+  region  = var.region
 }
 
 resource "aws_cloudwatch_metric_alarm" "total_cost" {
