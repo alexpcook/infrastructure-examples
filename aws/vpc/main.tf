@@ -7,6 +7,10 @@ locals {
   region_tag = lookup(var.regions, terraform.workspace, "sfo")
 }
 
+data "aws_availability_zones" "available" {
+  state = "available"
+}
+
 resource "aws_vpc" "vpc" {
   for_each = {
     for pair in setproduct(var.envs, keys(var.vpcs)) :
@@ -30,8 +34,9 @@ resource "aws_subnet" "subnet" {
     }
   }
 
-  vpc_id     = each.value.vpc_id
-  cidr_block = each.value.cidr_block
+  vpc_id            = each.value.vpc_id
+  cidr_block        = each.value.cidr_block
+  availability_zone = data.aws_availability_zones.available.names[split("-", each.key)[2] == "public" ? 0 : 1]
   tags = {
     Name   = each.key
     env    = split("-", each.key)[0]
