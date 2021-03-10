@@ -43,3 +43,14 @@ resource "aws_subnet" "subnet" {
     region = local.region_tag
   }
 }
+
+resource "aws_internet_gateway" "igw" {
+  for_each = aws_vpc.vpc
+
+  vpc_id = each.value.id
+  tags = {
+    Name   = join("-", [each.key, "igw"])
+    env    = split("-", each.key)[0]
+    region = local.region_tag
+  }
+}
