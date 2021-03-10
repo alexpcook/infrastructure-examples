@@ -1,6 +1,6 @@
 provider "aws" {
   profile = var.profile
-  region  = var.region
+  region  = terraform.workspace
 }
 
 resource "aws_vpc" "vpc" {
