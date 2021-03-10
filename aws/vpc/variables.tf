@@ -27,3 +27,12 @@ variable "vpcs" {
     "net2" : "192.168.0.0/24",
   }
 }
+
+variable "subnets" {
+  description = "The subnets to deploy to each VPC on AWS (last octet plus subnet mask)"
+  type        = map(string)
+  default = {
+    "public" : "0/28",
+    "private" : "16/28",
+  }
+}
