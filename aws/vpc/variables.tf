@@ -14,9 +14,9 @@ variable "vpcs" {
   description = "The networks to deploy to AWS"
   type        = map(string)
   default = {
-    "net1" : "10.1.0.0/24"
-    "net2" : "10.2.0.0/24"
-    "net3" : "10.3.0.0/24"
+    "dev" : "10.0.1.0/24",
+    "uat" : "10.0.2.0/24",
+    "prd" : "10.0.3.0/24",
   }
 }
 
@@ -24,8 +24,8 @@ variable "subnets" {
   description = "The subnets to deploy to each AWS VPC"
   type        = map(list(string))
   default = {
-    "net1" : ["10.1.0.0/28", "10.1.0.16/28"],
-    "net2" : ["10.2.0.0/28", "10.2.0.16/28"],
-    "net3" : ["10.3.0.0/28", "10.3.0.16/28"],
+    "dev" : ["10.0.1.0/28", "10.0.1.16/28"],
+    "uat" : ["10.0.2.0/28", "10.0.2.16/28"],
+    "prd" : ["10.0.3.0/28", "10.0.3.16/28"],
   }
 }
