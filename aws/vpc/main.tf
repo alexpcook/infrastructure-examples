@@ -4,9 +4,9 @@ provider "aws" {
 }
 
 resource "aws_vpc" "vpc" {
-  for_each   = var.vpcs
-  cidr_block = each.value
+  for_each   = var.envs
+  cidr_block = "10.0.0.0/24"
   tags = {
-    env = each.key
+    env = each.value
   }
 }
