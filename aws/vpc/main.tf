@@ -3,6 +3,7 @@ provider "aws" {
   region  = var.region
 }
 
-resource "aws_vpc" "vpc1" {
-  cidr_block = "10.0.0.0/24"
+resource "aws_vpc" "vpc" {
+  for_each   = var.network
+  cidr_block = each.key
 }
