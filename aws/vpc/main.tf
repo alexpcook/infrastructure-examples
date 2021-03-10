@@ -1,40 +1,40 @@
 provider "aws" {
   profile = var.profile
-  region  = terraform.workspace == "default" ? "us-east-1" : terraform.workspace
+  region  = terraform.workspace != "default" ? terraform.workspace : "us-west-1"
 }
 
 locals {
-  region_tag = lookup(var.regions, terraform.workspace, "unk")
+  region_tag = lookup(var.regions, terraform.workspace, "sfo")
 }
 
 resource "aws_vpc" "vpc" {
   for_each = {
-    for pair in setproduct(var.envs, keys(var.vpcs)) : "${pair[0]}-${pair[1]}" => var.vpcs[pair[1]]
+    for pair in setproduct(var.envs, keys(var.vpcs)) :
+    "${pair[0]}-${pair[1]}" => var.vpcs[pair[1]]
   }
 
   cidr_block = each.value
   tags = {
-    region = local.region_tag
+    Name   = each.key
     env    = split("-", each.key)[0]
-    name   = split("-", each.key)[1]
+    region = local.region_tag
   }
 }
 
 resource "aws_subnet" "subnet" {
   for_each = {
-    for combo in setproduct(var.envs, keys(var.vpcs), keys(var.subnets)) :
-    "${combo[0]}-${combo[1]}-${combo[2]}" => {
-      vpc_id     = aws_vpc.vpc[join("-", [combo[0], combo[1]])].id,
-      cidr_block = join("", [trimsuffix(var.vpcs[combo[1]], "0/24"), var.subnets[combo[2]]]),
+    for pair in setproduct(keys(aws_vpc.vpc), keys(var.subnets)) :
+    "${pair[0]}-${pair[1]}" => {
+      vpc_id     = aws_vpc.vpc[pair[0]].id
+      cidr_block = var.subnets[pair[1]]
     }
   }
 
   vpc_id     = each.value.vpc_id
   cidr_block = each.value.cidr_block
   tags = {
-    region = local.region_tag
+    Name   = each.key
     env    = split("-", each.key)[0]
-    vpc    = split("-", each.key)[1]
-    name   = split("-", each.key)[2]
+    region = local.region_tag
   }
 }
