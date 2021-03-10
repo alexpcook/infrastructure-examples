@@ -10,12 +10,22 @@ variable "region" {
   default     = "us-west-1" # N. California
 }
 
-variable "network" {
-  description = "The network to deploy to AWS"
+variable "vpcs" {
+  description = "The networks to deploy to AWS"
+  type        = map(string)
+  default = {
+    "net1" : "10.0.0.0/24"
+    "net2" : "10.1.0.0/24"
+    "net3" : "10.2.0.0/24"
+  }
+}
+
+variable "subnets" {
+  description = "The subnets to deploy to each AWS VPC"
   type        = map(list(string))
   default = {
-    "10.0.0.0/24" = ["10.0.0.0/28", "10.0.0.16/28"],
-    "10.1.0.0/24" = ["10.0.0.0/28", "10.0.0.16/28"],
-    "10.2.0.0/24" = ["10.0.0.0/28", "10.0.0.16/28"],
+    "net1" : ["10.0.0.0/28", "10.0.0.16/28"],
+    "net2" : ["10.0.0.0/28", "10.0.0.16/28"],
+    "net3" : ["10.0.0.0/28", "10.0.0.16/28"],
   }
 }
