@@ -4,10 +4,13 @@ variable "profile" {
   # This can be set with an environment variable called TF_VAR_profile
 }
 
-variable "region" {
-  description = "The AWS region to deploy to"
-  type        = string
-  default     = "us-west-1" # N. California
+variable "regions" {
+  description = "The AWS regions to deploy to (must have a corresponding workspace)"
+  type        = map(string)
+  default = {
+    "us-west-1" : "sfo",
+    "eu-west-2" : "lhr",
+  }
 }
 
 variable "envs" {

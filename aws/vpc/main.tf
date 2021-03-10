@@ -1,6 +1,10 @@
 provider "aws" {
   profile = var.profile
-  region  = terraform.workspace
+  region  = terraform.workspace == "default" ? "us-east-1" : terraform.workspace
+}
+
+locals {
+  region_id = lookup(var.regions, terraform.workspace, "unk")
 }
 
 resource "aws_vpc" "vpc" {
@@ -10,6 +14,6 @@ resource "aws_vpc" "vpc" {
 
   cidr_block = each.value
   tags = {
-    env = each.key
+    env = join("-", [local.region_id, each.key])
   }
 }
