@@ -1,6 +1,7 @@
 variable "profile" {
   description = "The AWS profile to deploy to"
   type        = string
+  # This can be set with an environment variable using TF_VAR_* syntax
 }
 
 variable "region" {
