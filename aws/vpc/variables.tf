@@ -15,3 +15,12 @@ variable "envs" {
   type        = set(string)
   default     = ["dev", "uat", "prd"]
 }
+
+variable "vpcs" {
+  description = "The VPCs to deploy to AWS"
+  type        = map(string)
+  default = {
+    "net1" : "10.0.0.0/24",
+    "net2" : "192.168.0.0/24",
+  }
+}
