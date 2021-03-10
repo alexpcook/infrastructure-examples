@@ -14,7 +14,9 @@ resource "aws_vpc" "vpc" {
 
   cidr_block = each.value
   tags = {
-    name = join("-", [local.region_tag, each.key])
+    region = local.region_tag
+    env    = split("-", each.key)[0]
+    name   = split("-", each.key)[1]
   }
 }
 
@@ -30,6 +32,9 @@ resource "aws_subnet" "subnet" {
   vpc_id     = each.value.vpc_id
   cidr_block = each.value.cidr_block
   tags = {
-    name = each.key
+    region = local.region_tag
+    env    = split("-", each.key)[0]
+    vpc    = split("-", each.key)[1]
+    name   = split("-", each.key)[2]
   }
 }
