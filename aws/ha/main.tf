@@ -9,5 +9,5 @@ terraform {
 
 provider "aws" {
   profile = var.profile
-  region  = var.region
+  region  = terraform.workspace == "default" ? "us-west-1" : terraform.workspace
 }
