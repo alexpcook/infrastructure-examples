@@ -12,7 +12,7 @@ locals {
 resource "aws_vpc" "wp" {
   cidr_block = var.vpc_cidr
   tags = {
-    Name = join(var.dl, [var.name_prefix, "wp", "network"])
+    Name = var.name_prefix
   }
 }
 
@@ -20,7 +20,7 @@ resource "aws_default_route_table" "private" {
   default_route_table_id = aws_vpc.wp.default_route_table_id
 
   tags = {
-    Name = join(var.dl, [var.name_prefix, "wp", "rt", "private"])
+    Name = join(var.dl, [var.name_prefix, "private"])
   }
 }
 
@@ -31,14 +31,14 @@ resource "aws_default_network_acl" "private" {
   ]
 
   tags = {
-    Name = join(var.dl, [var.name_prefix, "wp", "nacl", "private"])
+    Name = join(var.dl, [var.name_prefix, "private"])
   }
 }
 
 resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.wp.id
   tags = {
-    Name = join(var.dl, [var.name_prefix, "wp", "igw"])
+    Name = join(var.dl, [var.name_prefix, "igw"])
   }
 }
 
@@ -51,7 +51,7 @@ resource "aws_route_table" "public" {
   }
 
   tags = {
-    Name = join(var.dl, [var.name_prefix, "wp", "rt", "public"])
+    Name = join(var.dl, [var.name_prefix, "public"])
   }
 }
 
@@ -93,7 +93,7 @@ resource "aws_network_acl" "public" {
   }]
 
   tags = {
-    Name = join(var.dl, [var.name_prefix, "wp", "nacl", "public"])
+    Name = join(var.dl, [var.name_prefix, "public"])
   }
 }
 
@@ -110,7 +110,7 @@ resource "aws_subnet" "wp" {
   cidr_block        = each.value.cidr_block
   availability_zone = each.value.availability_zone
   tags = {
-    Name = join(var.dl, [var.name_prefix, "wp", "subnet", each.key])
+    Name = join(var.dl, [var.name_prefix, each.key])
   }
 }
 

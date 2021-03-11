@@ -1,7 +1,7 @@
 resource "aws_s3_bucket" "wp" {
   for_each = toset(var.s3_bucket_names)
 
-  bucket = join(var.dl, [var.name_prefix, "wordpress", each.value])
+  bucket = join(var.dl, [var.name_prefix, each.value])
 }
 
 resource "aws_s3_bucket_public_access_block" "block_all" {

@@ -13,7 +13,7 @@ variable "dl" {
 variable "name_prefix" {
   description = "The name prefix to append to AWS resources"
   type        = string
-  default     = "apc-acg"
+  default     = "apc-acg-wp"
 }
 
 variable "s3_bucket_names" {
