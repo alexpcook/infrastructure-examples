@@ -13,6 +13,13 @@ resource "aws_default_route_table" "private" {
   }
 }
 
+resource "aws_default_network_acl" "private" {
+  default_network_acl_id = aws_vpc.wp.default_network_acl_id
+  tags = {
+    Name = join(var.dl, [var.name_prefix, "wp", "nacl", "private"])
+  }
+}
+
 resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.wp.id
   tags = {
