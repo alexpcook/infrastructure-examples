@@ -5,6 +5,13 @@ resource "aws_vpc" "wp" {
   }
 }
 
+resource "aws_internet_gateway" "igw" {
+  vpc_id = aws_vpc.wp.id
+  tags = {
+    Name = join(var.dl, [var.name_prefix, "wp", "igw"])
+  }
+}
+
 data "aws_availability_zones" "available" {
   state = "available"
 }
