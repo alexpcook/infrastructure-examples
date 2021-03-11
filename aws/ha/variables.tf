@@ -15,3 +15,10 @@ variable "name_prefix" {
   type        = string
   default     = "apc-acg"
 }
+
+variable "s3_bucket_names" {
+  description = "The S3 bucket names to deploy to AWS"
+  type        = list(string)
+  // Create two buckets for WP code and WP media
+  default = ["code", "media"]
+}
