@@ -18,6 +18,7 @@ resource "aws_vpc" "vpc" {
   }
 
   cidr_block = each.value
+
   tags = {
     Name   = each.key
     env    = split("-", each.key)[0]
@@ -37,6 +38,7 @@ resource "aws_subnet" "subnet" {
   vpc_id            = each.value.vpc_id
   cidr_block        = each.value.cidr_block
   availability_zone = data.aws_availability_zones.available.names[split("-", each.key)[2] == "public" ? 0 : 1]
+
   tags = {
     Name   = each.key
     env    = split("-", each.key)[0]
@@ -48,6 +50,7 @@ resource "aws_internet_gateway" "igw" {
   for_each = aws_vpc.vpc
 
   vpc_id = each.value.id
+
   tags = {
     Name   = join("-", [each.key, "igw"])
     env    = split("-", each.key)[0]
@@ -59,6 +62,7 @@ resource "aws_default_route_table" "private" {
   for_each = aws_vpc.vpc
 
   default_route_table_id = each.value.default_route_table_id
+
   tags = {
     Name   = join("-", [each.key, "rt", "private"])
     env    = split("-", each.key)[0]
@@ -74,6 +78,7 @@ resource "aws_route_table" "public" {
     cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.igw[each.key].id
   }
+
   tags = {
     Name   = join("-", [each.key, "rt", "public"])
     env    = split("-", each.key)[0]
