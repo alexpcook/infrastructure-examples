@@ -55,7 +55,7 @@ resource "aws_internet_gateway" "igw" {
   }
 }
 
-resource "aws_route_table" "main" {
+resource "aws_route_table" "private" {
   for_each = aws_vpc.vpc
 
   vpc_id = each.value.id
@@ -81,9 +81,23 @@ resource "aws_route_table" "public" {
   }
 }
 
-resource "aws_main_route_table_association" "association" {
+resource "aws_main_route_table_association" "main" {
   for_each = aws_vpc.vpc
 
   vpc_id         = each.value.id
-  route_table_id = aws_route_table.main[each.key].id
+  route_table_id = aws_route_table.private[each.key].id
+}
+
+resource "aws_route_table_association" "public" {
+  for_each = aws_route_table.public
+
+  route_table_id = each.value.id
+  subnet_id      = aws_subnet.subnet[join("-", [each.key, "public"])].id
+}
+
+resource "aws_route_table_association" "private" {
+  for_each = aws_route_table.private
+
+  route_table_id = each.value.id
+  subnet_id      = aws_subnet.subnet[join("-", [each.key, "private"])].id
 }
