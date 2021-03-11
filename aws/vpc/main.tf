@@ -99,13 +99,41 @@ resource "aws_default_network_acl" "private" {
   for_each = aws_vpc.vpc
 
   default_network_acl_id = each.value.default_network_acl_id
-  subnet_ids = [
-    for key, subnet in aws_subnet.subnet :
-    subnet.id if split("-", key)[0] == split("-", each.key)[0]
-  ]
+  subnet_ids             = [aws_subnet.subnet[join("-", [each.key, "private"])].id]
 
   tags = {
     Name   = join("-", [each.key, "nacl", "private"])
+    env    = split("-", each.key)[0]
+    region = local.region_tag
+  }
+}
+
+resource "aws_network_acl" "public" {
+  for_each = aws_vpc.vpc
+
+  vpc_id     = each.value.id
+  subnet_ids = [aws_subnet.subnet[join("-", [each.key, "public"])].id]
+
+  ingress {
+    protocol   = "all"
+    rule_no    = 100
+    action     = "allow"
+    cidr_block = "0.0.0.0/0"
+    from_port  = 0
+    to_port    = 0
+  }
+
+  egress {
+    protocol   = "all"
+    rule_no    = 100
+    action     = "allow"
+    cidr_block = "0.0.0.0/0"
+    from_port  = 0
+    to_port    = 0
+  }
+
+  tags = {
+    Name   = join("-", [each.key, "nacl", "public"])
     env    = split("-", each.key)[0]
     region = local.region_tag
   }
