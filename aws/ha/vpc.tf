@@ -31,6 +31,18 @@ resource "aws_security_group" "web" {
     self             = false
     to_port          = 22
   }]
+
+  egress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = "Allow all outbound traffic"
+    from_port        = 0
+    ipv6_cidr_blocks = null
+    prefix_list_ids  = null
+    protocol         = "-1"
+    security_groups  = null
+    self             = false
+    to_port          = 0
+  }]
 }
 
 resource "aws_security_group" "db" {
