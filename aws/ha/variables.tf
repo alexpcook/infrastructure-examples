@@ -31,7 +31,7 @@ variable "vpc_cidr" {
 
 variable "my_public_ip" {
   description = "The public IP address to allow for SSH into the web security group"
-  type = string
-  sensitive = true
+  type        = string
+  sensitive   = true
   # Set using TF_VAR_my_public_ip
 }
