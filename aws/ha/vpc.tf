@@ -1,7 +1,35 @@
 resource "aws_vpc" "wp" {
   cidr_block = var.vpc_cidr
   tags = {
-    Name = "wordpress-network"
+    Name = join(var.dl, [var.name_prefix, "wp", "network"])
+  }
+}
+
+data "aws_availability_zones" "available" {
+  state = "available"
+}
+
+locals {
+  az = {
+    primary   = data.aws_availability_zones.available.names[0]
+    secondary = data.aws_availability_zones.available.names[1]
+  }
+}
+
+resource "aws_subnet" "wp" {
+  for_each = {
+    for inx, val in setproduct(keys(local.az), ["public", "private"])
+    : "${val[0]}-${val[1]}" => {
+      cidr_block        = format(var.subnet_cidr_format_string, inx + 1)
+      availability_zone = local.az[val[0]]
+    }
+  }
+
+  vpc_id            = aws_vpc.wp.id
+  cidr_block        = each.value.cidr_block
+  availability_zone = each.value.availability_zone
+  tags = {
+    Name = join(var.dl, [var.name_prefix, "wp", "subnet", each.key])
   }
 }
 

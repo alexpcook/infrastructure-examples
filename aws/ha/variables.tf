@@ -29,13 +29,10 @@ variable "vpc_cidr" {
   default     = "192.168.0.0/16"
 }
 
-variable "subnet_cidrs" {
-  description = "The CIDR block subnets to deploy to the AWS VPC"
-  type        = map(string)
-  default = {
-    public  = "192.168.1.0/24",
-    private = "192.168.2.0/24"
-  }
+variable "subnet_cidr_format_string" {
+  description = "The format string to use for subnet CIDR blocks"
+  type        = string
+  default     = "192.168.%s.0/24"
 }
 
 variable "my_public_ip" {
