@@ -1,3 +1,14 @@
+data "aws_availability_zones" "available" {
+  state = "available"
+}
+
+locals {
+  az = {
+    primary   = data.aws_availability_zones.available.names[0]
+    secondary = data.aws_availability_zones.available.names[1]
+  }
+}
+
 resource "aws_vpc" "wp" {
   cidr_block = var.vpc_cidr
   tags = {
@@ -83,17 +94,6 @@ resource "aws_network_acl" "public" {
 
   tags = {
     Name = join(var.dl, [var.name_prefix, "wp", "nacl", "public"])
-  }
-}
-
-data "aws_availability_zones" "available" {
-  state = "available"
-}
-
-locals {
-  az = {
-    primary   = data.aws_availability_zones.available.names[0]
-    secondary = data.aws_availability_zones.available.names[1]
   }
 }
 
