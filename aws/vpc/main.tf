@@ -101,3 +101,19 @@ resource "aws_route_table_association" "private" {
   route_table_id = each.value.id
   subnet_id      = aws_subnet.subnet[join("-", [each.key, "private"])].id
 }
+
+resource "aws_network_acl" "deny_all" {
+  for_each = aws_vpc.vpc
+
+  vpc_id = each.value.id
+  subnet_ids = [
+    for key, subnet in aws_subnet.subnet :
+    subnet.id if split("-", key)[0] == split("-", each.key)[0]
+  ]
+
+  tags = {
+    Name   = join("-", [each.key, "nacl"])
+    env    = split("-", each.key)[0]
+    region = local.region_tag
+  }
+}
