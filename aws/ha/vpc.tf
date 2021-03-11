@@ -33,6 +33,13 @@ resource "aws_route_table" "public" {
   }
 }
 
+resource "aws_route_table_association" "association" {
+  for_each = aws_subnet.wp
+
+  route_table_id = split(var.dl, each.key)[1] == "public" ? aws_route_table.public.id : aws_vpc.wp.default_route_table_id
+  subnet_id      = each.value.id
+}
+
 data "aws_availability_zones" "available" {
   state = "available"
 }
