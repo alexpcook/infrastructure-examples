@@ -20,6 +20,16 @@ resource "aws_security_group" "web" {
     security_groups  = null
     self             = false
     to_port          = 80
+    }, {
+    cidr_blocks      = [format("%s/32", var.my_public_ip)]
+    description      = "Allow SSH from my public IP"
+    from_port        = 22
+    ipv6_cidr_blocks = null
+    prefix_list_ids  = null
+    protocol         = "tcp"
+    security_groups  = null
+    self             = false
+    to_port          = 22
   }]
 }
 
