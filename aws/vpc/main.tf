@@ -55,20 +55,35 @@ resource "aws_internet_gateway" "igw" {
   }
 }
 
-resource "aws_route_table" "rt" {
+resource "aws_route_table" "main" {
   for_each = aws_vpc.vpc
 
   vpc_id = each.value.id
   tags = {
-    Name   = join("-", [each.key, "rt"])
+    Name   = join("-", [each.key, "rt", "private"])
     env    = split("-", each.key)[0]
     region = local.region_tag
   }
 }
 
-resource "aws_main_route_table_association" "main_rt" {
+resource "aws_route_table" "public" {
+  for_each = aws_vpc.vpc
+
+  vpc_id = each.value.id
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.igw[each.key].id
+  }
+  tags = {
+    Name   = join("-", [each.key, "rt", "public"])
+    env    = split("-", each.key)[0]
+    region = local.region_tag
+  }
+}
+
+resource "aws_main_route_table_association" "association" {
   for_each = aws_vpc.vpc
 
   vpc_id         = each.value.id
-  route_table_id = aws_route_table.rt[each.key].id
+  route_table_id = aws_route_table.main[each.key].id
 }
