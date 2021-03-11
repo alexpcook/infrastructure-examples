@@ -49,4 +49,28 @@ resource "aws_security_group" "db" {
   name        = join(var.dl, [var.name_prefix, "db"])
   description = "Allow MySQL from the web security group"
   vpc_id      = aws_vpc.wp.id
+
+  ingress = [{
+    cidr_blocks      = null
+    description      = "Allow MySQL from the web security group"
+    from_port        = 3306
+    ipv6_cidr_blocks = null
+    prefix_list_ids  = null
+    protocol         = "tcp"
+    security_groups  = [aws_security_group.web.id]
+    self             = false
+    to_port          = 3306
+  }]
+
+  egress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = "Allow all outbound traffic"
+    from_port        = 0
+    ipv6_cidr_blocks = null
+    prefix_list_ids  = null
+    protocol         = "-1"
+    security_groups  = null
+    self             = false
+    to_port          = 0
+  }]
 }
