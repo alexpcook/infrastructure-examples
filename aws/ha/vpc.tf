@@ -20,6 +20,19 @@ resource "aws_internet_gateway" "igw" {
   }
 }
 
+resource "aws_route_table" "public" {
+  vpc_id = aws_vpc.wp.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.igw.id
+  }
+
+  tags = {
+    Name = join(var.dl, [var.name_prefix, "wp", "rt", "public"])
+  }
+}
+
 data "aws_availability_zones" "available" {
   state = "available"
 }
