@@ -54,3 +54,21 @@ resource "aws_internet_gateway" "igw" {
     region = local.region_tag
   }
 }
+
+resource "aws_route_table" "rt" {
+  for_each = aws_vpc.vpc
+
+  vpc_id = each.value.id
+  tags = {
+    Name   = join("-", [each.key, "rt"])
+    env    = split("-", each.key)[0]
+    region = local.region_tag
+  }
+}
+
+resource "aws_main_route_table_association" "main_rt" {
+  for_each = aws_vpc.vpc
+
+  vpc_id         = each.value.id
+  route_table_id = aws_route_table.rt[each.key].id
+}
