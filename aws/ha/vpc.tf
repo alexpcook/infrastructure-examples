@@ -15,6 +15,10 @@ resource "aws_default_route_table" "private" {
 
 resource "aws_default_network_acl" "private" {
   default_network_acl_id = aws_vpc.wp.default_network_acl_id
+  subnet_ids = [
+    for az in keys(local.az) : aws_subnet.wp[join(var.dl, [az, "private"])].id
+  ]
+
   tags = {
     Name = join(var.dl, [var.name_prefix, "wp", "nacl", "private"])
   }
@@ -48,8 +52,10 @@ resource "aws_route_table_association" "association" {
 }
 
 resource "aws_network_acl" "public" {
-  vpc_id     = aws_vpc.wp.id
-  subnet_ids = []
+  vpc_id = aws_vpc.wp.id
+  subnet_ids = [
+    for az in keys(local.az) : aws_subnet.wp[join(var.dl, [az, "public"])].id
+  ]
 
   ingress = [{
     action          = "allow"
