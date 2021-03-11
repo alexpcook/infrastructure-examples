@@ -47,6 +47,39 @@ resource "aws_route_table_association" "association" {
   subnet_id      = each.value.id
 }
 
+resource "aws_network_acl" "public" {
+  vpc_id     = aws_vpc.wp.id
+  subnet_ids = []
+
+  ingress = [{
+    action          = "allow"
+    cidr_block      = "0.0.0.0/0"
+    from_port       = 0
+    icmp_code       = null
+    icmp_type       = null
+    ipv6_cidr_block = null
+    protocol        = "all"
+    rule_no         = 100
+    to_port         = 0
+  }]
+
+  egress = [{
+    action          = "allow"
+    cidr_block      = "0.0.0.0/0"
+    from_port       = 0
+    icmp_code       = null
+    icmp_type       = null
+    ipv6_cidr_block = null
+    protocol        = "all"
+    rule_no         = 100
+    to_port         = 0
+  }]
+
+  tags = {
+    Name = join(var.dl, [var.name_prefix, "wp", "nacl", "public"])
+  }
+}
+
 data "aws_availability_zones" "available" {
   state = "available"
 }
