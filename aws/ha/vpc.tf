@@ -5,6 +5,14 @@ resource "aws_vpc" "wp" {
   }
 }
 
+resource "aws_default_route_table" "private" {
+  default_route_table_id = aws_vpc.wp.default_route_table_id
+
+  tags = {
+    Name = join(var.dl, [var.name_prefix, "wp", "rt", "private"])
+  }
+}
+
 resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.wp.id
   tags = {
