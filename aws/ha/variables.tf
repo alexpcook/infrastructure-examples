@@ -22,3 +22,16 @@ variable "s3_bucket_names" {
   // Create two buckets for WP code and WP media
   default = ["code", "media"]
 }
+
+variable "vpc_cidr" {
+  description = "The CIDR block of the VPC to deploy to AWS"
+  type        = string
+  default     = "192.168.0.0/16"
+}
+
+variable "my_public_ip" {
+  description = "The public IP address to allow for SSH into the web security group"
+  type = string
+  sensitive = true
+  # Set using TF_VAR_my_public_ip
+}
