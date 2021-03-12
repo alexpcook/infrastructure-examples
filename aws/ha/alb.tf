@@ -39,3 +39,14 @@ resource "aws_lb_target_group_attachment" "wp_web" {
   target_id        = each.value.id
   port             = 80
 }
+
+resource "aws_lb_listener" "wp_web" {
+  load_balancer_arn = aws_lb.wp.arn
+  port              = 80
+  protocol          = "HTTP"
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.wp.arn
+  }
+}
