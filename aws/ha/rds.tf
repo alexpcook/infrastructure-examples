@@ -12,7 +12,6 @@ resource "aws_db_instance" "mysql" {
 
   allocated_storage     = 20
   max_allocated_storage = 50 // this enables storage auto-scaling
-  storage_encrypted     = true
 
   engine         = "mysql"
   engine_version = "5.7"
