@@ -41,3 +41,10 @@ variable "my_public_ip" {
   sensitive   = true
   # Set using TF_VAR_my_public_ip
 }
+
+variable "rds_user_password" {
+  description = "The credentials for the main user of the RDS instance"
+  type        = string
+  sensitive   = true
+  # Set using TF_VAR_rds_user_password
+}
