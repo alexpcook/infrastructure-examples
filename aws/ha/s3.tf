@@ -7,9 +7,11 @@ resource "aws_s3_bucket" "wp" {
 resource "aws_s3_bucket_public_access_block" "block_all" {
   for_each = aws_s3_bucket.wp
 
-  bucket                  = each.value.id
-  block_public_acls       = true
-  block_public_policy     = true
-  ignore_public_acls      = true
-  restrict_public_buckets = true
+  bucket = each.value.id
+
+  // allow public access only to media bucket
+  block_public_acls       = each.key == var.s3_bucket_names[1] ? false : true
+  block_public_policy     = each.key == var.s3_bucket_names[1] ? false : true
+  ignore_public_acls      = each.key == var.s3_bucket_names[1] ? false : true
+  restrict_public_buckets = each.key == var.s3_bucket_names[1] ? false : true
 }
