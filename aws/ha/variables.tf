@@ -48,3 +48,11 @@ variable "rds_user_password" {
   sensitive   = true
   # Set using TF_VAR_rds_user_password
 }
+
+variable "web_ami_id" {
+  description = "The AWS AMI to use for the web EC2 instances"
+  type        = map(string)
+  default = {
+    us-west-1 = "ami-0c7945b4c95c0481c"
+  }
+}
