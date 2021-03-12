@@ -4,7 +4,7 @@ resource "aws_s3_bucket" "wp" {
   bucket = join(var.dl, [var.name_prefix, each.value])
 }
 
-resource "aws_s3_bucket_public_access_block" "block_all" {
+resource "aws_s3_bucket_public_access_block" "public_access" {
   for_each = aws_s3_bucket.wp
 
   bucket = each.value.id
