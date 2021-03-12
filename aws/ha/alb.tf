@@ -27,7 +27,15 @@ resource "aws_lb_target_group" "wp" {
 
     healthy_threshold   = 2
     unhealthy_threshold = 3
-    timeout             = 5
-    interval            = 6
+    timeout             = 10
+    interval            = 30
   }
+}
+
+resource "aws_lb_target_group_attachment" "wp_web" {
+  for_each = aws_instance.wp_web
+
+  target_group_arn = aws_lb_target_group.wp.arn
+  target_id        = each.value.id
+  port             = 80
 }
