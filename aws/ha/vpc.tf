@@ -106,9 +106,11 @@ resource "aws_subnet" "wp" {
     }
   }
 
-  vpc_id            = aws_vpc.wp.id
-  cidr_block        = each.value.cidr_block
-  availability_zone = each.value.availability_zone
+  vpc_id                  = aws_vpc.wp.id
+  cidr_block              = each.value.cidr_block
+  availability_zone       = each.value.availability_zone
+  map_public_ip_on_launch = split(var.dl, each.key)[1] == "public" ? true : false
+
   tags = {
     Name = join(var.dl, [var.name_prefix, each.key])
   }
