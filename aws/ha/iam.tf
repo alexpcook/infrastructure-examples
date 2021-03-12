@@ -10,3 +10,7 @@ resource "aws_iam_role" "ec2_s3_full_access" {
     data.aws_iam_policy.AmazonS3FullAccess.arn,
   ]
 }
+
+resource "aws_iam_instance_profile" "wp_web" {
+  role = aws_iam_role.ec2_s3_full_access.name
+}
