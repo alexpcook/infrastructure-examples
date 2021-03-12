@@ -8,13 +8,13 @@ locals {
 resource "aws_instance" "wp_web" {
   for_each = local.public_subnets
 
-  ami                  = var.web_ami_id[local.region]
-  instance_type        = "t2.micro"
-  subnet_id            = each.value.id
-  security_groups      = [aws_security_group.web.id]
-  key_name             = aws_key_pair.ssh_key.key_name
-  iam_instance_profile = aws_iam_instance_profile.wp_web.id
-  user_data            = file("ec2_wp_web_bootstrap.sh")
+  ami                    = var.web_ami_id[local.region]
+  instance_type          = "t2.micro"
+  subnet_id              = each.value.id
+  vpc_security_group_ids = [aws_security_group.web.id]
+  key_name               = aws_key_pair.ssh_key.key_name
+  iam_instance_profile   = aws_iam_instance_profile.wp_web.id
+  user_data              = file("ec2_wp_web_bootstrap.sh")
 
   tags = {
     Name = join(var.dl, [var.name_prefix, "web"])
