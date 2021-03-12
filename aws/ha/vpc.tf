@@ -30,6 +30,24 @@ resource "aws_default_network_acl" "private" {
     for az in keys(local.az) : aws_subnet.wp[join(var.dl, [az, "private"])].id
   ]
 
+  ingress {
+    protocol   = "tcp"
+    rule_no    = 100
+    action     = "allow"
+    cidr_block = var.vpc_cidr
+    from_port  = 3306
+    to_port    = 3306
+  }
+
+  egress {
+    protocol   = "tcp"
+    rule_no    = 100
+    action     = "allow"
+    cidr_block = var.vpc_cidr
+    from_port  = 1024
+    to_port    = 65535
+  }
+
   tags = {
     Name = join(var.dl, [var.name_prefix, "private"])
   }
